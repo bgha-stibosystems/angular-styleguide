@@ -350,7 +350,8 @@ class TodoController {
   
 }
 
-TodoController.$inject = ['TodoService'];
+// We'll use ng-annotate
+~~TodoController.$inject = ['TodoService'];~~
 
 export default TodoController;
 
@@ -367,14 +368,14 @@ export default todo;
 ```
 
 ```html
-  /* ----- todo/todo.html ----- */
-  <div class="todo">
-      <todo-form
-        todo="$ctrl.newTodo"
-        on-add-todo="$ctrl.addTodo($event);"></todo-form>
-      <todo-list
-        todos="$ctrl.todos"></todo-list>
-    </div>
+/* ----- todo/todo.html ----- */
+<div class="todo">
+    <lp-todo-form
+      todo="$ctrl.newTodo"
+      on-add-todo="$ctrl.addTodo($event);"></todo-form>
+    <lp-todo-list
+      todos="$ctrl.todos"></todo-list>
+</div>
 ```
 
 This example shows a stateful component, that fetches state inside the controller, through a service, and then passes it down into stateless child components. Notice how there are no Directives being used such as `ng-repeat` and friends inside the template. Instead, data and functions are delegated into `<todo-form>` and `<todo-list>` stateless components.
@@ -417,7 +418,7 @@ export default TodoFormComponent;
 
 /* ----- todo/todo-form/todo-form.controller.js ----- */
 class TodoFormController {
-  constructor(EventEmitter) {}
+  constructor(~~EventEmitter~~) {}
   $onChanges(changes) {
     if (changes.todo) {
       this.todo = Object.assign({}, this.todo);
@@ -428,11 +429,11 @@ class TodoFormController {
     // with EventEmitter wrapper
     // For now We'll rather use $event as long as We do not see
     // practical benefits of using EventEmitter
-    this.onAddTodo(
+    ~~this.onAddTodo(
       EventEmitter({
         todo: this.todo
       });
-    );
+    );~~
     // without EventEmitter wrapper
     this.onAddTodo({
       $event: {
@@ -445,7 +446,7 @@ class TodoFormController {
 
 // For now We'll rather use $event as long as We do not see
 // practical benefits of using EventEmitter
-TodoFormController.$inject = ['EventEmitter'];
+~~TodoFormController.$inject = ['EventEmitter'];~~
 
 export default TodoFormController;
 
@@ -456,7 +457,7 @@ import TodoFormComponent from './todo-form.component';
 const todoForm = angular
   .module('todo.form', [])
   .component('todoForm', TodoFormComponent)
-  .value('EventEmitter', payload => ({ $event: payload}))
+  ~~.value('EventEmitter', payload => ({ $event: payload}))~~
   .name;
 
 export default todoForm;
