@@ -59,21 +59,24 @@ A root module begins with a root component that defines the base element for the
 
 ```js
 // app.component.js
-const AppComponent = {
-  template: `
-    <header>
-        Hello world
-    </header>
-    <div>
-        <div ui-view></div>
-    </div>
-    <footer>
-        Copyright MyApp 2016.
-    </footer>
-  `
+const AppComponent: ng.IComponentOptions = {
+  template: require('./app.html')
 };
 
 export default AppComponent;
+```
+
+```html
+// app.html
+<header>
+    Hello world
+</header>
+<div>
+    <div ui-view></div>
+</div>
+<footer>
+    Copyright MyApp 2016.
+</footer>
 ```
 
 A root module is then created, with `AppComponent` imported and registered with `.component('app', AppComponent)`. Further imports for submodules (component and common modules) are made to include all components relevant for the application.
@@ -86,7 +89,7 @@ import AppComponent from './app.component';
 import Components from './components/components';
 import Modules from './modules/modules';
 
-const root = angular
+const root: string = angular
   .module('app', [
     Components,
     Modules,
@@ -109,7 +112,7 @@ import angular from 'angular';
 import Calendar from './calendar';
 import Events from './events';
 
-const components = angular
+const components: string = angular
   .module('app.components', [
     Calendar,
     Events
@@ -130,7 +133,7 @@ import angular from 'angular';
 import Nav from './nav';
 import Footer from './footer';
 
-const modules = angular
+const modules: string = angular
   .module('app.modules', [
     Nav,
     Footer
@@ -153,7 +156,7 @@ import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import CalendarComponent from './calendar.component';
 
-const Calendar = angular
+const Calendar: string = angular
   .module('lp.calendar', [
     uiRouter
   ])
@@ -317,7 +320,7 @@ An example of a stateful component, complete with its low-level module definitio
 /* ----- todo/todo.component.js ----- */
 import controller from './todo.controller';
 
-const TodoComponent = {
+const TodoComponent: ng.IComponentOptions = {
   controller,
   templateUrl: `./todo.html`
 };
@@ -326,26 +329,34 @@ export default TodoComponent;
 
 /* ----- todo/todo.controller.js ----- */
 class TodoController {
-  constructor(LpTodoService) {
-    this.todoService = LpTodoService;
-  }
+  constructor(private LpTodoService) {}
   
   $onInit() {
-    this.newTodo = {
-      title: '',
-      selected: false
-    };
-    this.todos = [];
-    this.todoService.getTodos().then(response => this.todos = response);
+    doSomething();
+    doSomethingElse();
   }
   
-  addTodo({ todo }) {
+  public addTodo({ todo }): void {
     if (!todo) return;
     this.todos.unshift(todo);
-    this.newTodo = {
-      title: '',
-      selected: false
-    };
+    doSomethingCommon();
+  }
+  
+  private doSomething(): void {
+    doSomethingCommon();
+    this.todos = [];
+      
+  }
+  
+  private doSomethingCommon(): void {
+      this.newTodo = {
+        title: '',
+        selected: false
+      };
+  }
+  
+  private doSomethingElse(): void {
+    this.todoService.getTodos().then(response => this.todos = response);
   }
   
 }
@@ -359,7 +370,7 @@ export default TodoController;
 import angular from 'angular';
 import TodoComponent from './todo.component';
 
-const todo = angular
+const todo: string = angular
   .module('lp.todo', [])
   .component('lpTodo', TodoComponent)
   .name;
