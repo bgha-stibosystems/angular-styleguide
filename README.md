@@ -121,23 +121,23 @@ export default components;
 
 **[Back to top](#table-of-contents)**
 
-### Common module
+### Modules module
 
-The Common module is the container reference for all application specific components, that we don't want to use in another application. This can be things like layout, navigation and footers. See above how we import `Common` and inject them into the Root module, this gives us a single place to import all common components for the app.
+The Modules module is the container reference for all application specific components, that we don't want to use in another application. This can be things like layout, navigation and footers. See above how we import `Modules` and inject them into the Root module, this gives us a single place to import all common components for the app.
 
 ```js
 import angular from 'angular';
 import Nav from './nav';
 import Footer from './footer';
 
-const common = angular
-  .module('app.common', [
+const modules = angular
+  .module('app.modules', [
     Nav,
     Footer
   ])
   .name;
 
-export default common;
+export default modules;
 ```
 
 **[Back to top](#table-of-contents)**
@@ -145,28 +145,29 @@ export default common;
 ### Low-level modules
 
 Low-level modules are individual component modules that contain the logic for each feature block. These will each define a module, to be imported to a higher-level module, such as a component or common module, an example below. Always remember to add the `.name` suffix to each `export` when creating a _new_ module, not when referencing one. You'll noticed routing definitions also exist here, we'll come onto this in later chapters in this guide.
+Low level modules should be prefixed to avoid collision with other modules with the same name. In our case We'll use `lp` prefix for module name and for component name. Prefix should not be used to name files.
 
 ```js
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import CalendarComponent from './calendar.component';
 
-const calendar = angular
-  .module('calendar', [
+const lpCalendar = angular
+  .module('lp.calendar', [
     uiRouter
   ])
-  .component('calendar', CalendarComponent)
+  .component('lpCalendar', CalendarComponent)
   .config(($stateProvider, $urlRouterProvider) => {
     $stateProvider
       .state('calendar', {
         url: '/calendar',
-        component: 'calendar'
+        component: 'lpCalendar'
       });
     $urlRouterProvider.otherwise('/');
   })
   .name;
 
-export default calendar;
+export default lpCalendar;
 ```
 
 **[Back to top](#table-of-contents)**
