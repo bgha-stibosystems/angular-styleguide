@@ -153,7 +153,7 @@ import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import CalendarComponent from './calendar.component';
 
-const lpCalendar = angular
+const Calendar = angular
   .module('lp.calendar', [
     uiRouter
   ])
@@ -168,7 +168,7 @@ const lpCalendar = angular
   })
   .name;
 
-export default lpCalendar;
+export default Calendar;
 ```
 
 **[Back to top](#table-of-contents)**
@@ -374,7 +374,7 @@ export default todo;
       todo="$ctrl.newTodo"
       on-add-todo="$ctrl.addTodo($event);"></todo-form>
     <lp-todo-list
-      todos="$ctrl.todos"></todo-list>
+      todos="$ctrl.todos"></lp-todo-list>
 </div>
 ```
 
@@ -394,7 +394,7 @@ Let's define what we'd call a "stateless component".
 * Are highly reusable components
 * Also referred to as dumb/presentational components
 
-An example of a stateless component (let's use `<todo-form>` as an example), complete with it's low-level module definition (this is only for demonstration, so some code has been omitted for brevity):
+An example of a stateless component (let's use `<lp-todo-form>` as an example), complete with it's low-level module definition (this is only for demonstration, so some code has been omitted for brevity):
 
 ```js
 /* ----- todo/todo-form/todo-form.component.js ----- */
@@ -476,7 +476,7 @@ Let's define what we'd call a "routed component".
 * We use Routed components to define their own routing logic
 * Data "input" for the component is done via the route resolve (optional, still available in the controller with service calls)
 
-For this example, we're going to take the existing `<todo>` component, refactor it to use a route definition and `bindings` on the component which receives data (the secret here with `ui-router` is the `resolve` properties we create, in this case `todoData` directly map across to `bindings` for us). We treat it as a routed component because it's essentially a "view":
+For this example, we're going to take the existing `<lp-todo>` component, refactor it to use a route definition and `bindings` on the component which receives data (the secret here with `ui-router` is the `resolve` properties we create, in this case `todoData` directly map across to `bindings` for us). We treat it as a routed component because it's essentially a "view":
 
 ```js
 /* ----- todo/todo.component.js ----- */
@@ -487,15 +487,7 @@ const TodoComponent = {
     todoData: '<'
   },
   controller,
-  template: `
-    <div class="todo">
-      <lp-todo-form
-        todo="$ctrl.newTodo"
-        on-add-todo="$ctrl.addTodo($event);"></todo-form>
-      <lp-todo-list
-        todos="$ctrl.todos"></todo-list>
-    </div>
-  `
+  templateUrl: `./todo.html`
 };
 
 export default TodoComponent;
@@ -572,6 +564,16 @@ const todo = angular
   .name;
 
 export default todo;
+```
+
+``` todo.html
+<div class="todo">
+  <lp-todo-form
+    todo="$ctrl.newTodo"
+    on-add-todo="$ctrl.addTodo($event);"></todo-form>
+  <lp-todo-list
+    todos="$ctrl.todos"></todo-list>
+</div>
 ```
 
 **[Back to top](#table-of-contents)**
