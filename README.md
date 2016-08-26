@@ -58,7 +58,7 @@ The design in the modules maps directly to our folder structure, which keeps thi
 A root module begins with a root component that defines the base element for the entire application, with a routing outlet defined, example shown using `ui-view` from `ui-router`.
 
 ```js
-// app.component.js
+// app.component.ts
 const AppComponent: ng.IComponentOptions = {
   template: require('./app.html')
 };
@@ -82,7 +82,7 @@ export default AppComponent;
 A root module is then created, with `AppComponent` imported and registered with `.component('app', AppComponent)`. Further imports for submodules (component and common modules) are made to include all components relevant for the application.
 
 ```js
-// app.js
+// app.ts
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import AppComponent from './app.component';
@@ -178,16 +178,16 @@ export default Calendar;
 
 ### File naming conventions
 
-Keep it simple and lowercase, use the component name, e.g. `calendar.*.js*`, `calendar-grid.*.js` - with the name of the type of file in the middle. Use `index.js` for the module definition file, so you can import the module by directory name.
+Keep it simple and lowercase, use the component name, e.g. `calendar.*.ts*`, `calendar-grid.*.ts` - with the name of the type of file in the middle. Use `index.ts` for the module definition file, so you can import the module by directory name.
 
 ```
-index.js
-calendar.controller.js
-calendar.component.js
-calendar.service.js
-calendar.directive.js
-calendar.filter.js
-calendar.spec.js
+index.ts
+calendar.controller.ts
+calendar.component.ts
+calendar.service.ts
+calendar.directive.ts
+calendar.filter.ts
+calendar.spec.ts
 ```
 
 **[Back to top](#table-of-contents)**
@@ -200,46 +200,46 @@ File structure is extremely important, this describes a scalable and predictable
 ├── app/
 │   ├── components/
 │   │  ├── calendar/
-│   │  │  ├── index.js
-│   │  │  ├── calendar.controller.js
-│   │  │  ├── calendar.component.js
-│   │  │  ├── calendar.service.js
-│   │  │  ├── calendar.spec.js
+│   │  │  ├── index.ts
+│   │  │  ├── calendar.controller.ts
+│   │  │  ├── calendar.component.ts
+│   │  │  ├── calendar.service.ts
+│   │  │  ├── calendar.spec.ts
 │   │  │  └── calendar-grid/
-│   │  │     ├── index.js
-│   │  │     ├── calendar-grid.controller.js
-│   │  │     ├── calendar-grid.component.js
-│   │  │     ├── calendar-grid.directive.js
-│   │  │     ├── calendar-grid.filter.js
-│   │  │     └── calendar-grid.spec.js
+│   │  │     ├── index.ts
+│   │  │     ├── calendar-grid.controller.ts
+│   │  │     ├── calendar-grid.component.ts
+│   │  │     ├── calendar-grid.directive.ts
+│   │  │     ├── calendar-grid.filter.ts
+│   │  │     └── calendar-grid.spec.ts
 │   │  └── events/
-│   │     ├── index.js
-│   │     ├── events.controller.js
-│   │     ├── events.component.js
-│   │     ├── events.directive.js
-│   │     ├── events.service.js
-│   │     ├── events.spec.js
+│   │     ├── index.ts
+│   │     ├── events.controller.ts
+│   │     ├── events.component.ts
+│   │     ├── events.directive.ts
+│   │     ├── events.service.ts
+│   │     ├── events.spec.ts
 │   │     └── events-signup/
-│   │        ├── index.js
-│   │        ├── events-signup.controller.js
-│   │        ├── events-signup.component.js
-│   │        ├── events-signup.service.js
-│   │        └── events-signup.spec.js
+│   │        ├── index.ts
+│   │        ├── events-signup.controller.ts
+│   │        ├── events-signup.component.ts
+│   │        ├── events-signup.service.ts
+│   │        └── events-signup.spec.ts
 │   ├── modules/
 │   │  ├── nav/
-│   │  │     ├── index.js
-│   │  │     ├── nav.controller.js
-│   │  │     ├── nav.component.js
-│   │  │     ├── nav.service.js
-│   │  │     └── nav.spec.js
+│   │  │     ├── index.ts
+│   │  │     ├── nav.controller.ts
+│   │  │     ├── nav.component.ts
+│   │  │     ├── nav.service.ts
+│   │  │     └── nav.spec.ts
 │   │  └── footer/
-│   │        ├── index.js
-│   │        ├── footer.controller.js
-│   │        ├── footer.component.js
-│   │        ├── footer.service.js
-│   │        └── footer.spec.js
-│   ├── app.js
-│   └── app.component.js
+│   │        ├── index.ts
+│   │        ├── footer.controller.ts
+│   │        ├── footer.component.ts
+│   │        ├── footer.service.ts
+│   │        └── footer.spec.ts
+│   ├── app.ts
+│   └── app.component.ts
 └── index.html
 ```
 
@@ -317,18 +317,18 @@ Let's define what we'd call a "stateful component".
 An example of a stateful component, complete with its low-level module definition (this is only for demonstration, so some code has been omitted for brevity):
 
 ```js
-/* ----- todo/todo.component.js ----- */
+/* ----- todo/todo.component.ts ----- */
 import controller from './todo.controller';
 
 const TodoComponent: ng.IComponentOptions = {
   controller,
-  templateUrl: `./todo.html`
+  templateUrl: require('./todo.html')
 };
 
 export default TodoComponent;
 
-/* ----- todo/todo.controller.js ----- */
-class TodoController {
+/* ----- todo/todo.controller.ts ----- */
+class TodoController implements ng.IComponentController {
   constructor(private LpTodoService) {}
   
   $onInit() {
@@ -366,7 +366,7 @@ TodoController.$inject = ['LpTodoService'];
 
 export default TodoController;
 
-/* ----- todo/index.js ----- */
+/* ----- todo/index.ts ----- */
 import angular from 'angular';
 import TodoComponent from './todo.component';
 
@@ -408,34 +408,31 @@ Let's define what we'd call a "stateless component".
 An example of a stateless component (let's use `<lp-todo-form>` as an example), complete with it's low-level module definition (this is only for demonstration, so some code has been omitted for brevity):
 
 ```js
-/* ----- todo/todo-form/todo-form.component.js ----- */
+/* ----- todo/todo-form/todo-form.component.ts ----- */
 import controller from './todo-form.controller';
 
-const TodoFormComponent = {
+const TodoFormComponent: ng.IComponentOptions = {
   bindings: {
     todo: '<',
     onAddTodo: '&'
   },
   controller,
-  template: `
-    <form name="todoForm" ng-submit="$ctrl.onSubmit();">
-      <input type="text" ng-model="$ctrl.todo.title">
-      <button type="submit">Submit</button>
-    </form>
-  `
+  template: require('./todo-form.html')
 };
 
 export default TodoFormComponent;
 
-/* ----- todo/todo-form/todo-form.controller.js ----- */
-class TodoFormController {
-  constructor(EventEmitter) {}
+/* ----- todo/todo-form/todo-form.controller.ts ----- */
+class TodoFormController implements ng.IComponentController {
+  constructor(private EventEmitter) {}
+  
   $onChanges(changes) {
     if (changes.todo) {
       this.todo = Object.assign({}, this.todo);
     }
   }
-  onSubmit() {
+  
+  public onSubmit() {
     if (!this.todo.title) return;
     // with EventEmitter wrapper
     // For now We'll rather use $event as long as We do not see
@@ -461,17 +458,24 @@ TodoFormController.$inject = ['EventEmitter'];
 
 export default TodoFormController;
 
-/* ----- todo/todo-form/index.js ----- */
+/* ----- todo/todo-form/index.ts ----- */
 import angular from 'angular';
 import TodoFormComponent from './todo-form.component';
 
-const todoForm = angular
+const todoForm: string = angular
   .module('lp.todo.form', [])
   .component('lpTodoForm', TodoFormComponent)
   .value('EventEmitter', payload => ({ $event: payload}))
   .name;
 
 export default todoForm;
+```
+
+```html
+<form name="todoForm" ng-submit="$ctrl.onSubmit();">
+  <input type="text" ng-model="$ctrl.todo.title">
+  <button type="submit">Submit</button>
+</form>
 ```
 
 Note how the `<lp-todo-form>` component fetches no state, it simply receives it, mutates an Object via the controller logic associated with it, and passes it back to the parent component through the property bindings. In this example, the `$onChanges` lifecycle hook makes a clone of the initial `this.todo` binding Object and reassigns it, which means the parent data is not affected until we submit the form, alongside one-way data flow new binding syntax `'<'`.
@@ -483,14 +487,14 @@ Note how the `<lp-todo-form>` component fetches no state, it simply receives it,
 Let's define what we'd call a "routed component".
 
 * It's essentially a stateful component, with routing definitions
-* No more `router.js` files
+* No more `router.ts` files
 * We use Routed components to define their own routing logic
 * Data "input" for the component is done via the route resolve (optional, still available in the controller with service calls)
 
 For this example, we're going to take the existing `<lp-todo>` component, refactor it to use a route definition and `bindings` on the component which receives data (the secret here with `ui-router` is the `resolve` properties we create, in this case `todoData` directly map across to `bindings` for us). We treat it as a routed component because it's essentially a "view":
 
 ```js
-/* ----- todo/todo.component.js ----- */
+/* ----- todo/todo.component.ts ----- */
 import controller from './todo.controller';
 
 const TodoComponent = {
@@ -503,7 +507,7 @@ const TodoComponent = {
 
 export default TodoComponent;
 
-/* ----- todo/todo.controller.js ----- */
+/* ----- todo/todo.controller.ts ----- */
 class TodoController {
   constructor() {}
   $onInit() {
@@ -534,7 +538,7 @@ class TodoController {
 
 export default TodoController;
 
-/* ----- todo/todo.service.js ----- */
+/* ----- todo/todo.service.ts ----- */
 class TodoService {
   constructor($http) {
     this.$http = $http;
@@ -549,7 +553,7 @@ TodoService.$inject = ['$http'];
 
 export default TodoService;
 
-/* ----- todo/index.js ----- */
+/* ----- todo/index.ts ----- */
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import TodoComponent from './todo.component';
@@ -634,7 +638,7 @@ There are a few ways to approach using ES2015 and directives, either with an arr
 Non recommended way: Here's an example using a constant with an Arrow function an expression wrapper `() => ({})` returning an Object literal (note the usage differences inside `.directive()`):
 
 ```js
-/* ----- todo/todo-autofocus.directive.js ----- */
+/* ----- todo/todo-autofocus.directive.ts ----- */
 import angular from 'angular';
 
 const TodoAutoFocus = ($timeout) => ({
@@ -654,7 +658,7 @@ TodoAutoFocus.$inject = ['$timeout'];
 
 export default TodoAutoFocus;
 
-/* ----- todo/index.js ----- */
+/* ----- todo/index.ts ----- */
 import angular from 'angular';
 import TodoComponent from './todo.component';
 import TodoAutofocus from './todo-autofocus.directive';
@@ -671,7 +675,7 @@ export default todo;
 Recommended way : using ES2015 `Class` (note manually calling `new TodoAutoFocus` when registering the directive) to create the Object:
 
 ```js
-/* ----- todo/todo-autofocus.directive.js ----- */
+/* ----- todo/todo-autofocus.directive.ts ----- */
 import angular from 'angular';
 
 class TodoAutoFocus {
@@ -693,7 +697,7 @@ TodoAutoFocus.$inject = ['$timeout'];
 
 export default TodoAutoFocus;
 
-/* ----- todo/index.js ----- */
+/* ----- todo/index.ts ----- */
 import angular from 'angular';
 import TodoComponent from './todo.component';
 import TodoAutofocus from './todo-autofocus.directive';
@@ -722,7 +726,7 @@ Services are essentially containers for business logic that our components shoul
 Here's an example implementation for our `<lp-todo>` app using ES2015 `Class`:
 
 ```js
-/* ----- todo/todo.service.js ----- */
+/* ----- todo/todo.service.ts ----- */
 class TodoService {
   constructor($http) {
     this.$http = $http;
@@ -736,7 +740,7 @@ TodoService.$inject = ['$http'];
 
 export default TodoService;
 
-/* ----- todo/index.js ----- */
+/* ----- todo/index.ts ----- */
 import angular from 'angular';
 import TodoComponent from './todo.component';
 import TodoService from './todo.service';
