@@ -329,6 +329,9 @@ export default TodoComponent;
 
 /* ----- todo/todo.controller.ts ----- */
 class TodoController implements ng.IComponentController {
+  private newTodo: ITodo;
+  private todos: ITodo[];
+
   constructor(private LpTodoService) {}
   
   $onInit() {
@@ -381,11 +384,11 @@ export default todo;
 ```html
 /* ----- todo/todo.html ----- */
 <div class="todo">
-    <lp-todo-form
-      todo="$ctrl.newTodo"
-      on-add-todo="$ctrl.addTodo($event);"></todo-form>
-    <lp-todo-list
-      todos="$ctrl.todos"></lp-todo-list>
+  <lp-todo-form
+    todo="$ctrl.newTodo"
+    on-add-todo="$ctrl.addTodo($event);"></todo-form>
+  <lp-todo-list
+    todos="$ctrl.todos"></lp-todo-list>
 </div>
 ```
 
@@ -424,6 +427,8 @@ export default TodoFormComponent;
 
 /* ----- todo/todo-form/todo-form.controller.ts ----- */
 class TodoFormController implements ng.IComponentController {
+  private todo: ITodo;
+  
   constructor(private EventEmitter) {}
   
   $onChanges(changes) {
@@ -497,25 +502,30 @@ For this example, we're going to take the existing `<lp-todo>` component, refact
 /* ----- todo/todo.component.ts ----- */
 import controller from './todo.controller';
 
-const TodoComponent = {
+const TodoComponent: ng.IComponentOptions = {
   bindings: {
     todoData: '<'
   },
   controller,
-  templateUrl: `./todo.html`
+  templateUrl: require('./todo.html')
 };
 
 export default TodoComponent;
 
 /* ----- todo/todo.controller.ts ----- */
-class TodoController {
+class TodoController implements ng.IComponentController {
+  private newTodo: ITodo;
+  private todos ITodo[];
+  
   constructor() {}
+  
   $onInit() {
     this.newTodo = {
       title: '',
       selected: false
     };
   }
+  
   // We have to be aware that $onChanges hook will not work correctly
   // each time. Sometimes We'll have to use for example $watchCollection 
   // (first comment in https://toddmotto.com/one-way-data-binding-in-angular-1-5/)
@@ -526,7 +536,8 @@ class TodoController {
       this.todos = Object.assign({}, this.todoData);
     }
   }
-  addTodo({ todo }) {
+  
+  public addTodo({ todo }) {
     if (!todo) return;
     this.todos.unshift(todo);
     this.newTodo = {
@@ -540,10 +551,12 @@ export default TodoController;
 
 /* ----- todo/todo.service.ts ----- */
 class TodoService {
+
   constructor($http) {
     this.$http = $http;
   }
-  getTodos() {
+  
+  public getTodos() {
     return this.$http.get('/api/todos').then(response => response.data);
   }
 }
@@ -559,7 +572,7 @@ import uiRouter from 'angular-ui-router';
 import TodoComponent from './todo.component';
 import TodoService from './todo.service';
 
-const todo = angular
+const todo: string = angular
   .module('lp.todo', [
     uiRouter
   ])
@@ -635,7 +648,7 @@ Due to the fact directives support most of what `.component()` does (template di
 
 There are a few ways to approach using ES2015 and directives, either with an arrow function and easier assignment, or using an ES2015 `Class`. Choose what's best for you or your team, keep in mind Angular 2 uses `Class`.
 
-Non recommended way: Here's an example using a constant with an Arrow function an expression wrapper `() => ({})` returning an Object literal (note the usage differences inside `.directive()`):
+Here's an example using a constant with an Arrow function an expression wrapper `() => ({})` returning an Object literal (note the usage differences inside `.directive()`):
 
 ```js
 /* ----- todo/todo-autofocus.directive.ts ----- */
@@ -643,7 +656,7 @@ import angular from 'angular';
 
 const TodoAutoFocus = ($timeout) => ({
   restrict: 'A',
-  link($scope, $element, $attrs) {
+  link($scope ng.IScope, $element: ng.IAugmentedJQuery, $attrs: ng.IAttributes) {
     $scope.$watch($attrs.todoAutofocus, (newValue, oldValue) => {
       if (!newValue) {
         return;
@@ -663,7 +676,7 @@ import angular from 'angular';
 import TodoComponent from './todo.component';
 import TodoAutofocus from './todo-autofocus.directive';
 
-const todo = angular
+const todo: string = angular
   .module('lp.todo', [])
   .component('lpTodo', TodoComponent)
   .directive('lpTodoAutofocus', TodoAutoFocus)
@@ -672,7 +685,7 @@ const todo = angular
 export default todo;
 ```
 
-Recommended way : using ES2015 `Class` (note manually calling `new TodoAutoFocus` when registering the directive) to create the Object:
+using ES2015 `Class` (note manually calling `new TodoAutoFocus` when registering the directive) to create the Object:
 
 ```js
 /* ----- todo/todo-autofocus.directive.ts ----- */
@@ -682,7 +695,8 @@ class TodoAutoFocus {
   constructor() {
     this.restrict = 'A';
   }
-  link($scope, $element, $attrs) {
+  
+  link($scope ng.IScope, $element: ng.IAugmentedJQuery, $attrs: ng.IAttributes) {
     $scope.$watch($attrs.todoAutofocus, (newValue, oldValue) => {
       if (!newValue) {
         return;
@@ -702,7 +716,7 @@ import angular from 'angular';
 import TodoComponent from './todo.component';
 import TodoAutofocus from './todo-autofocus.directive';
 
-const todo = angular
+const todo: string = angular
   .module('lp.todo', [])
   .component('lpTodo', TodoComponent)
   .directive('lpTodoAutofocus', () => new TodoAutoFocus)
@@ -710,6 +724,11 @@ const todo = angular
 
 export default todo;
 ```
+
+**[Back to top](#table-of-contents)**
+
+### Interfaces
+// TODO Establish final solution how to use interfaces
 
 **[Back to top](#table-of-contents)**
 
@@ -731,11 +750,17 @@ class TodoService {
   constructor($http) {
     this.$http = $http;
   }
-  getTodos() {
+  
+  public getTodos() {
     return this.$http.get('/api/todos').then(response => response.data);
+  }
+  
+  private doSomethingPrivate() {
+  
   }
 }
 
+// We'll use ng-annotate instead of manual $inject
 TodoService.$inject = ['$http'];
 
 export default TodoService;
@@ -745,7 +770,7 @@ import angular from 'angular';
 import TodoComponent from './todo.component';
 import TodoService from './todo.service';
 
-const todo = angular
+const todo: string = angular
   .module('lp.todo', [])
   .component('lpTodo', TodoComponent)
   .service('LpTodoService', TodoService)
@@ -793,6 +818,11 @@ Consider using Redux with Angular 1.5 for data management.
 * [Sample Application from Community](https://github.com/chihab/angular-styleguide-sample)
 
 **[Back to top](#table-of-contents)**
+
+# Typescript
+* [Typescript](https://www.typescriptlang.org/)
+* [Typings](https://github.com/DefinitelyTyped/DefinitelyTyped)
+* [Typings AngularJS](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/angularjs)
 
 # Documentation
 For anything else, including API reference, check the [Angular documentation](//docs.angularjs.org/api).
