@@ -2,7 +2,7 @@
 
 ### Architecture, file structure, components, one-way dataflow and best practices
 
-*A sensible styleguide for teams by [@toddmotto](//twitter.com/toddmotto)*
+*A sensible styleguide for StiboSystems Cloud team forked from [@toddmotto](//twitter.com/toddmotto)*
 
 This architecture and styleguide has been rewritten from the ground up for ES2015, the changes in Angular 1.5+ for future-upgrading your application to Angular 2. This guide includes new best practices for one-way dataflow, event delegation, component architecture and component routing.
 
@@ -84,12 +84,12 @@ import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import AppComponent from './app.component';
 import Components from './components/components';
-import Common from './common/common';
+import Modules from './modules/modules';
 
 const root = angular
   .module('app', [
     Components,
-    Common,
+    Modules,
     uiRouter
   ])
   .component('app', AppComponent)
