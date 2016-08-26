@@ -319,15 +319,7 @@ import controller from './todo.controller';
 
 const TodoComponent = {
   controller,
-  template: `
-    <div class="todo">
-      <todo-form
-        todo="$ctrl.newTodo"
-        on-add-todo="$ctrl.addTodo($event);"></todo-form>
-      <todo-list
-        todos="$ctrl.todos"></todo-list>
-    </div>
-  `
+  templateUrl: `./todo.html`
 };
 
 export default TodoComponent;
@@ -337,6 +329,7 @@ class TodoController {
   constructor(TodoService) {
     this.todoService = TodoService;
   }
+  
   $onInit() {
     this.newTodo = {
       title: '',
@@ -345,6 +338,7 @@ class TodoController {
     this.todos = [];
     this.todoService.getTodos().then(response => this.todos = response);
   }
+  
   addTodo({ todo }) {
     if (!todo) return;
     this.todos.unshift(todo);
@@ -353,6 +347,7 @@ class TodoController {
       selected: false
     };
   }
+  
 }
 
 TodoController.$inject = ['TodoService'];
@@ -364,11 +359,22 @@ import angular from 'angular';
 import TodoComponent from './todo.component';
 
 const todo = angular
-  .module('todo', [])
-  .component('todo', TodoComponent)
+  .module('lp.todo', [])
+  .component('lpTodo', TodoComponent)
   .name;
 
 export default todo;
+```
+
+```html
+  /* ----- todo/todo.html ----- */
+  <div class="todo">
+      <todo-form
+        todo="$ctrl.newTodo"
+        on-add-todo="$ctrl.addTodo($event);"></todo-form>
+      <todo-list
+        todos="$ctrl.todos"></todo-list>
+    </div>
 ```
 
 This example shows a stateful component, that fetches state inside the controller, through a service, and then passes it down into stateless child components. Notice how there are no Directives being used such as `ng-repeat` and friends inside the template. Instead, data and functions are delegated into `<todo-form>` and `<todo-list>` stateless components.
@@ -420,6 +426,8 @@ class TodoFormController {
   onSubmit() {
     if (!this.todo.title) return;
     // with EventEmitter wrapper
+    // For now We'll rather use $event as long as We do not see
+    // practical benefits of using EventEmitter
     this.onAddTodo(
       EventEmitter({
         todo: this.todo
@@ -434,6 +442,9 @@ class TodoFormController {
   }
 }
 
+
+// For now We'll rather use $event as long as We do not see
+// practical benefits of using EventEmitter
 TodoFormController.$inject = ['EventEmitter'];
 
 export default TodoFormController;
