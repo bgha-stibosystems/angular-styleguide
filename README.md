@@ -326,8 +326,8 @@ export default TodoComponent;
 
 /* ----- todo/todo.controller.js ----- */
 class TodoController {
-  constructor(TodoService) {
-    this.todoService = TodoService;
+  constructor(LpTodoService) {
+    this.todoService = LpTodoService;
   }
   
   $onInit() {
@@ -350,8 +350,8 @@ class TodoController {
   
 }
 
-// We'll use ng-annotate
-~~TodoController.$inject = ['TodoService'];~~
+// We'll use ng-annotate instead of manual $inject
+TodoController.$inject = ['LpTodoService'];
 
 export default TodoController;
 
@@ -418,7 +418,7 @@ export default TodoFormComponent;
 
 /* ----- todo/todo-form/todo-form.controller.js ----- */
 class TodoFormController {
-  constructor(~~EventEmitter~~) {}
+  constructor(EventEmitter) {}
   $onChanges(changes) {
     if (changes.todo) {
       this.todo = Object.assign({}, this.todo);
@@ -429,11 +429,11 @@ class TodoFormController {
     // with EventEmitter wrapper
     // For now We'll rather use $event as long as We do not see
     // practical benefits of using EventEmitter
-    ~~this.onAddTodo(
+    this.onAddTodo(
       EventEmitter({
         todo: this.todo
       });
-    );~~
+    );
     // without EventEmitter wrapper
     this.onAddTodo({
       $event: {
@@ -446,7 +446,7 @@ class TodoFormController {
 
 // For now We'll rather use $event as long as We do not see
 // practical benefits of using EventEmitter
-~~TodoFormController.$inject = ['EventEmitter'];~~
+TodoFormController.$inject = ['EventEmitter'];
 
 export default TodoFormController;
 
@@ -455,15 +455,15 @@ import angular from 'angular';
 import TodoFormComponent from './todo-form.component';
 
 const todoForm = angular
-  .module('todo.form', [])
-  .component('todoForm', TodoFormComponent)
-  ~~.value('EventEmitter', payload => ({ $event: payload}))~~
+  .module('lp.todo.form', [])
+  .component('lpTodoForm', TodoFormComponent)
+  .value('EventEmitter', payload => ({ $event: payload}))
   .name;
 
 export default todoForm;
 ```
 
-Note how the `<todo-form>` component fetches no state, it simply receives it, mutates an Object via the controller logic associated with it, and passes it back to the parent component through the property bindings. In this example, the `$onChanges` lifecycle hook makes a clone of the initial `this.todo` binding Object and reassigns it, which means the parent data is not affected until we submit the form, alongside one-way data flow new binding syntax `'<'`.
+Note how the `<lp-todo-form>` component fetches no state, it simply receives it, mutates an Object via the controller logic associated with it, and passes it back to the parent component through the property bindings. In this example, the `$onChanges` lifecycle hook makes a clone of the initial `this.todo` binding Object and reassigns it, which means the parent data is not affected until we submit the form, alongside one-way data flow new binding syntax `'<'`.
 
 **[Back to top](#table-of-contents)**
 
@@ -489,10 +489,10 @@ const TodoComponent = {
   controller,
   template: `
     <div class="todo">
-      <todo-form
+      <lp-todo-form
         todo="$ctrl.newTodo"
         on-add-todo="$ctrl.addTodo($event);"></todo-form>
-      <todo-list
+      <lp-todo-list
         todos="$ctrl.todos"></todo-list>
     </div>
   `
@@ -509,6 +509,11 @@ class TodoController {
       selected: false
     };
   }
+  // We have to be aware that $onChanges hook will not work correctly
+  // each time. Sometimes We'll have to use for example $watchCollection 
+  // (first comment in https://toddmotto.com/one-way-data-binding-in-angular-1-5/)
+  // way to solve problem is to use Angular >=1.5.8 where $doCheck is
+  // implemented.
   $onChanges(changes) {
     if (changes.todoData) {
       this.todos = Object.assign({}, this.todoData);
@@ -536,6 +541,7 @@ class TodoService {
   }
 }
 
+// We'll use ng-annotate instead of manual $inject
 TodoService.$inject = ['$http'];
 
 export default TodoService;
@@ -547,11 +553,11 @@ import TodoComponent from './todo.component';
 import TodoService from './todo.service';
 
 const todo = angular
-  .module('todo', [
+  .module('lp.todo', [
     uiRouter
   ])
-  .component('todo', TodoComponent)
-  .service('TodoService', TodoService)
+  .component('lpTodo', TodoComponent)
+  .service('LpTodoService', TodoService)
   .config(($stateProvider, $urlRouterProvider) => {
     $stateProvider
       .state('todos', {
@@ -612,7 +618,7 @@ Due to the fact directives support most of what `.component()` does (template di
 
 There are a few ways to approach using ES2015 and directives, either with an arrow function and easier assignment, or using an ES2015 `Class`. Choose what's best for you or your team, keep in mind Angular 2 uses `Class`.
 
-Here's an example using a constant with an Arrow function an expression wrapper `() => ({})` returning an Object literal (note the usage differences inside `.directive()`):
+Non recommended way: Here's an example using a constant with an Arrow function an expression wrapper `() => ({})` returning an Object literal (note the usage differences inside `.directive()`):
 
 ```js
 /* ----- todo/todo-autofocus.directive.js ----- */
@@ -630,6 +636,7 @@ const TodoAutoFocus = ($timeout) => ({
   }
 });
 
+// We'll use ng-annotate instead of manual $inject
 TodoAutoFocus.$inject = ['$timeout'];
 
 export default TodoAutoFocus;
@@ -640,15 +647,15 @@ import TodoComponent from './todo.component';
 import TodoAutofocus from './todo-autofocus.directive';
 
 const todo = angular
-  .module('todo', [])
-  .component('todo', TodoComponent)
-  .directive('todoAutofocus', TodoAutoFocus)
+  .module('lp.todo', [])
+  .component('lpTodo', TodoComponent)
+  .directive('lpTodoAutofocus', TodoAutoFocus)
   .name;
 
 export default todo;
 ```
 
-Or using ES2015 `Class` (note manually calling `new TodoAutoFocus` when registering the directive) to create the Object:
+Recommended way : using ES2015 `Class` (note manually calling `new TodoAutoFocus` when registering the directive) to create the Object:
 
 ```js
 /* ----- todo/todo-autofocus.directive.js ----- */
@@ -668,6 +675,7 @@ class TodoAutoFocus {
   }
 }
 
+// We'll use ng-annotate instead of manual $inject
 TodoAutoFocus.$inject = ['$timeout'];
 
 export default TodoAutoFocus;
@@ -678,9 +686,9 @@ import TodoComponent from './todo.component';
 import TodoAutofocus from './todo-autofocus.directive';
 
 const todo = angular
-  .module('todo', [])
-  .component('todo', TodoComponent)
-  .directive('todoAutofocus', () => new TodoAutoFocus)
+  .module('lp.todo', [])
+  .component('lpTodo', TodoComponent)
+  .directive('lpTodoAutofocus', () => new TodoAutoFocus)
   .name;
 
 export default todo;
@@ -698,7 +706,7 @@ Services are essentially containers for business logic that our components shoul
 
 ### Classes for Service
 
-Here's an example implementation for our `<todo>` app using ES2015 `Class`:
+Here's an example implementation for our `<lp-todo>` app using ES2015 `Class`:
 
 ```js
 /* ----- todo/todo.service.js ----- */
@@ -721,9 +729,9 @@ import TodoComponent from './todo.component';
 import TodoService from './todo.service';
 
 const todo = angular
-  .module('todo', [])
-  .component('todo', TodoComponent)
-  .service('TodoService', TodoService)
+  .module('lp.todo', [])
+  .component('lpTodo', TodoComponent)
+  .service('LpTodoService', TodoService)
   .name;
 
 export default todo;
