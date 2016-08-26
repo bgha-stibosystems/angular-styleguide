@@ -145,6 +145,7 @@ export default modules;
 ### Low-level modules
 
 Low-level modules are individual component modules that contain the logic for each feature block. These will each define a module, to be imported to a higher-level module, such as a component or common module, an example below. Always remember to add the `.name` suffix to each `export` when creating a _new_ module, not when referencing one. You'll noticed routing definitions also exist here, we'll come onto this in later chapters in this guide.
+
 Low level modules should be prefixed to avoid collision with other modules with the same name. In our case We'll use `lp` prefix for module name and for component name. Prefix should not be used to name files.
 
 ```js
@@ -221,7 +222,7 @@ File structure is extremely important, this describes a scalable and predictable
 │   │        ├── events-signup.component.js
 │   │        ├── events-signup.service.js
 │   │        └── events-signup.spec.js
-│   ├── common/
+│   ├── modules/
 │   │  ├── nav/
 │   │  │     ├── index.js
 │   │  │     ├── nav.controller.js
