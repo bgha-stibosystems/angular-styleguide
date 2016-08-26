@@ -728,7 +728,7 @@ export default todo;
 
 **[Back to top](#table-of-contents)**
 
-### Interfaces
+# Interfaces
 // TODO Establish final solution how to use interfaces
 
 **[Back to top](#table-of-contents)**
