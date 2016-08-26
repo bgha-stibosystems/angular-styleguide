@@ -67,7 +67,7 @@ export default AppComponent;
 ```
 
 ```html
-// app.html
+<!-- app.html -->
 <header>
     Hello world
 </header>
@@ -382,7 +382,7 @@ export default todo;
 ```
 
 ```html
-/* ----- todo/todo.html ----- */
+<!-- todo/todo.html -->
 <div class="todo">
   <lp-todo-form
     todo="$ctrl.newTodo"
@@ -595,6 +595,7 @@ export default todo;
 ```
 
 ``` todo.html
+<!-- todo.html -->
 <div class="todo">
   <lp-todo-form
     todo="$ctrl.newTodo"
