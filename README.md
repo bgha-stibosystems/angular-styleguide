@@ -1,4 +1,4 @@
-# Angular 1.x styleguide (ES2015)
+# Angular 1.5.x styleguide (TypeScript)
 
 ### Architecture, file structure, components, one-way dataflow and best practices
 
