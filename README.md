@@ -721,6 +721,25 @@ export default todo;
 
 **[Back to top](#table-of-contents)**
 
+# Translations
+We agreed that We should use translations as an attribute in our templates :
+
+
+```html
+<!-- YES. Simplest. And shows useful info for debugging. -->
+<p translate-values="count">PAGE.TEXT</p>\
+
+<!-- nope - try to avoid. If You use this type of translation because of some reasons consider use one time binding (::) -->
+<p>{{'PAGE.TEXT' | translate}}</p>
+
+<!--  considered, but down voted - try to avoid -->
+<p translate='PAGE.TEXT' translate-values='count'></p> -
+```
+
+In our js files We should use `$translate` services instead of `$filter`. In most cases the best way will be to use `$translate.instant()` to prevent using unnecessary promise.
+
+**[Back to top](#table-of-contents)**
+
 # Services
 
 ### Service theory
