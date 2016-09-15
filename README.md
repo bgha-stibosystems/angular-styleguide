@@ -328,11 +328,12 @@ const TodoComponent: ng.IComponentOptions = {
 export default TodoComponent;
 
 /* ----- todo/todo.controller.ts ----- */
+/* @ngInject */
 class TodoController implements ng.IComponentController {
   private newTodo: ITodo;
   private todos: ITodo[];
 
-  constructor(private LpTodoService) {}
+  constructor(private todo) {}
   
   $onInit() {
     doSomething();
@@ -359,13 +360,10 @@ class TodoController implements ng.IComponentController {
   }
   
   private doSomethingElse(): void {
-    this.todoService.getTodos().then(response => this.todos = response);
+    this.todo.getTodos().then(response => this.todos = response);
   }
   
 }
-
-// We'll use ng-annotate instead of manual $inject
-TodoController.$inject = ['LpTodoService'];
 
 export default TodoController;
 
@@ -426,6 +424,7 @@ const TodoFormComponent: ng.IComponentOptions = {
 export default TodoFormComponent;
 
 /* ----- todo/todo-form/todo-form.controller.ts ----- */
+/* @ngInject */
 class TodoFormController implements ng.IComponentController {
   private todo: ITodo;
   
@@ -455,11 +454,6 @@ class TodoFormController implements ng.IComponentController {
     });
   }
 }
-
-
-// For now We'll rather use $event as long as We do not see
-// practical benefits of using EventEmitter
-TodoFormController.$inject = ['EventEmitter'];
 
 export default TodoFormController;
 
@@ -550,6 +544,7 @@ class TodoController implements ng.IComponentController {
 export default TodoController;
 
 /* ----- todo/todo.service.ts ----- */
+/* @ngInject */
 class TodoService {
 
   constructor($http) {
@@ -560,9 +555,6 @@ class TodoService {
     return this.$http.get('/api/todos').then(response => response.data);
   }
 }
-
-// We'll use ng-annotate instead of manual $inject
-TodoService.$inject = ['$http'];
 
 export default TodoService;
 
@@ -577,14 +569,14 @@ const todo: string = angular
     uiRouter
   ])
   .component('lpTodo', TodoComponent)
-  .service('LpTodoService', TodoService)
+  .service('todo', TodoService)
   .config(($stateProvider, $urlRouterProvider) => {
     $stateProvider
       .state('todos', {
         url: '/todos',
         component: 'todo',
         resolve: {
-          todoData: TodoService => TodoService.getTodos();
+          todoData: todo => todo.getTodos();
         }
       });
     $urlRouterProvider.otherwise('/');
@@ -655,6 +647,7 @@ Here's an example using a constant with an Arrow function an expression wrapper 
 /* ----- todo/todo-autofocus.directive.ts ----- */
 import angular from 'angular';
 
+/* @ngInject */
 const TodoAutoFocus = ($timeout) => ({
   restrict: 'A',
   link($scope ng.IScope, $element: ng.IAugmentedJQuery, $attrs: ng.IAttributes) {
@@ -666,9 +659,6 @@ const TodoAutoFocus = ($timeout) => ({
     });
   }
 });
-
-// We'll use ng-annotate instead of manual $inject
-TodoAutoFocus.$inject = ['$timeout'];
 
 export default TodoAutoFocus;
 
@@ -692,6 +682,7 @@ using ES2015 `Class` (note manually calling `new TodoAutoFocus` when registering
 /* ----- todo/todo-autofocus.directive.ts ----- */
 import angular from 'angular';
 
+/* @ngInject */
 class TodoAutoFocus {
   constructor() {
     this.restrict = 'A';
@@ -706,9 +697,6 @@ class TodoAutoFocus {
     });
   }
 }
-
-// We'll use ng-annotate instead of manual $inject
-TodoAutoFocus.$inject = ['$timeout'];
 
 export default TodoAutoFocus;
 
@@ -747,6 +735,7 @@ Here's an example implementation for our `<lp-todo>` app using ES2015 `Class`:
 
 ```js
 /* ----- todo/todo.service.ts ----- */
+/* @ngInject */
 class TodoService {
   constructor($http) {
     this.$http = $http;
@@ -761,9 +750,6 @@ class TodoService {
   }
 }
 
-// We'll use ng-annotate instead of manual $inject
-TodoService.$inject = ['$http'];
-
 export default TodoService;
 
 /* ----- todo/index.ts ----- */
@@ -774,7 +760,7 @@ import TodoService from './todo.service';
 const todo: string = angular
   .module('lp.todo', [])
   .component('lpTodo', TodoComponent)
-  .service('LpTodoService', TodoService)
+  .service('todo', TodoService)
   .name;
 
 export default todo;
