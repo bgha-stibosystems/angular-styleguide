@@ -1,0 +1,27 @@
+{
+    "Create component controller test setup": {
+		"prefix": "component-unit-test",
+		"body": [
+			"import * as angular from 'angular';",
+			"// tslint:disable:no-empty",
+			"// tslint:disable:only-arrow-functions",
+			"describe('${1:describeTitle}', () => {",
+			"	let controller: ${2:controllerType};",
+			"	beforeEach(() => {",
+			"		angular.mock.module((\\$provide: ng.auto.IProvideService) => {",
+			"			// Mocked providers go here",
+			"       });",
+			"		angular.mock.module('pascalprecht.translate');",
+			"		angular.mock.module('ui.router');",
+			"		angular.mock.module(${3:serviceModuleName});",
+			"	});",
+			"	// tslint:disable-next-line:variable-name",
+			"	beforeEach(inject((_\\$componentController_) => {",
+			"		controller = _\\$componentController_('${4:componentName}', null, {});",
+			"	}));",
+			"	$0",
+			"});"
+		],
+		"description": "Create a stub for a new anuglar 1 component controller unit test"
+	}
+}

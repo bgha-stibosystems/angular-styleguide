@@ -1,0 +1,27 @@
+{
+    "Create service test setup": {
+		"prefix": "service-unit-test",
+		"body": [
+			"import * as angular from 'angular';",
+			"// tslint:disable:no-empty",
+			"// tslint:disable:only-arrow-functions",
+			"describe('${1:describeTitle}', () => {",
+			"	let ${2:serviceName}: ${3:serviceType};",
+			"	beforeEach(() => {",
+			"		angular.mock.module((\\$provide: ng.auto.IProvideService) => {",
+			"			// Mocked providers go here",
+			"       });",
+			"		angular.mock.module('pascalprecht.translate');",
+			"		angular.mock.module('ui.router');",
+			"		angular.mock.module(${4:serviceModuleName});",
+			"	});",
+			"	// tslint:disable-next-line:variable-name",
+			"	beforeEach(inject((_${2:serviceName}_) => {",
+			"		${2:serviceName} = _${2:serviceName}_;",
+			"	}));",
+			"	$0",
+			"});"
+		],
+		"description": "Create a stub for a new anuglar 1 service unit test"
+	}
+}
